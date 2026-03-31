@@ -1,12 +1,8 @@
-
 import React, { useState, useEffect } from "react";
 import { BlogPost } from "@/api/entities";
-import { User } from "@/api/entities";
-import { PenTool, Search, Feather } from "lucide-react";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
-import { Input } from "@/components/ui/input";
+import { PenTool, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Input } from "@/components/ui/input";
 
 import PostCard from "../components/blog/PostCard";
 
@@ -15,7 +11,6 @@ export default function Blog() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -25,10 +20,11 @@ export default function Blog() {
     if (!searchQuery) {
       setFilteredPosts(posts);
     } else {
-      const filtered = posts.filter(post => 
-        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+      const q = searchQuery.toLowerCase();
+      const filtered = posts.filter(post =>
+        post.title.toLowerCase().includes(q) ||
+        post.excerpt?.toLowerCase().includes(q) ||
+        post.tags?.some(tag => tag.toLowerCase().includes(q))
       );
       setFilteredPosts(filtered);
     }
@@ -36,31 +32,10 @@ export default function Blog() {
 
   const loadData = async () => {
     setIsLoading(true);
-    
-    // Load posts
     const publishedPosts = await BlogPost.filter({ is_published: true }, "-created_date");
     setPosts(publishedPosts);
-
-    // Load current user
-    try {
-      const user = await User.me();
-      setCurrentUser(user);
-    } catch (error) {
-      setCurrentUser(null);
-    }
-    
     setIsLoading(false);
   };
-
-  const handlePostDeleted = (deletedPostId) => {
-    const updatedPosts = posts.filter(post => post.id !== deletedPostId);
-    setPosts(updatedPosts);
-  };
-
-  const isAdmin = currentUser?.role === 'admin';
-  // Check admin view mode from localStorage
-  const adminViewMode = JSON.parse(localStorage.getItem('adminViewMode') || 'true');
-  const showAdminFeatures = isAdmin && adminViewMode;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
@@ -82,23 +57,6 @@ export default function Blog() {
               A collection of projects, insights, and musings on life, work, and everything in between.
             </p>
           </motion.div>
-
-          {showAdminFeatures && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-8"
-            >
-              <Link 
-                to={createPageUrl("Write")}
-                className="inline-flex items-center space-x-2 bg-gray-900 text-white px-6 py-3 rounded-full hover:bg-gray-800 transition-colors duration-200 font-medium"
-              >
-                <PenTool className="w-4 h-4" />
-                <span>Write New Post</span>
-              </Link>
-            </motion.div>
-          )}
         </div>
 
         {/* Search Bar */}
@@ -168,20 +126,9 @@ export default function Blog() {
                 <PenTool className="w-8 h-8 text-gray-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">No posts yet</h3>
-              <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                {showAdminFeatures 
-                  ? "Your creative journey starts here. Share your first project with the world."
-                  : "New projects and insights will appear here soon. Check back later!"}
+              <p className="text-gray-600 max-w-md mx-auto">
+                New projects and insights will appear here soon. Check back later!
               </p>
-              {showAdminFeatures && (
-                <Link 
-                  to={createPageUrl("Write")}
-                  className="inline-flex items-center space-x-2 bg-gray-900 text-white px-6 py-3 rounded-full hover:bg-gray-800 transition-colors duration-200 font-medium"
-                >
-                  <PenTool className="w-4 h-4" />
-                  <span>Write Your First Post</span>
-                </Link>
-              )}
             </motion.div>
           ) : (
             <motion.div

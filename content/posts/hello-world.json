@@ -1,0 +1,11 @@
+{
+  "id": "hello-world",
+  "title": "Hello, World",
+  "excerpt": "Welcome to Hundred Acre Wood — a record of projects, experiments, and things I'm building.",
+  "content": "# Hello, World\n\nWelcome to **Hundred Acre Wood** — my personal corner of the internet.\n\nThis is a space where I document projects I'm working on, share things I've learned, and think out loud about work and craft.\n\n## What to expect\n\n- Write-ups on software projects\n- Notes on things I'm learning\n- Occasional musings on life and work\n\nMore posts coming soon. Thanks for stopping by.",
+  "tags": ["intro"],
+  "created_date": "2024-01-01T00:00:00.000Z",
+  "is_published": true,
+  "reading_time": 1,
+  "featured_image_url": ""
+}
