@@ -7,6 +7,22 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Decode the URL encoded by 404.html for SPA routing on GitHub Pages.
+      // 404.html encodes /post?id=foo as /?p=post&q=id%3Dfoo so that GitHub
+      // serves index.html. This script restores the original URL before React mounts.
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var p = params.get('p');
+        if (p !== null) {
+          var q = params.get('q');
+          var restored = '/' + decodeURIComponent(p) +
+            (q ? '?' + decodeURIComponent(q) : '') +
+            window.location.hash;
+          window.history.replaceState(null, null, restored);
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
