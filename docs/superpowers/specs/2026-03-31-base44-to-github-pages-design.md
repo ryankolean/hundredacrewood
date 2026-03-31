@@ -1,11 +1,11 @@
-# Base44 → Static GitHub Pages Migration
+# Legacy Platform → Static GitHub Pages Migration
 
 **Date:** 2026-03-31
 **Status:** Approved
 
 ## Summary
 
-Migrate ryankolean.com (Hundred Acre Wood blog) from Base44 SDK to a fully static Vite + React site deployable to GitHub Pages. All Base44 backend dependencies (auth, entity CRUD, file upload) are replaced with static data and the admin write interface is removed from routing.
+Migrate ryankolean.com (Hundred Acre Wood blog) from a legacy hosted platform SDK to a fully static Vite + React site deployable to GitHub Pages. All legacy backend dependencies (auth, entity CRUD, file upload) are replaced with static data and the admin write interface is removed from routing.
 
 ## Architecture
 
@@ -37,7 +37,7 @@ Each post JSON file:
 
 | File | Action |
 |------|--------|
-| `src/api/base44Client.js` | Deleted |
+| `src/api/legacyClient.js` | Deleted |
 | `src/api/entities.js` | Rewritten — static in-memory BlogPost + stub User |
 | `src/api/integrations.js` | Rewritten — all no-op stubs |
 | `src/data/posts.js` | Created — glob-imports content/posts/*.json |
@@ -46,7 +46,7 @@ Each post JSON file:
 | `src/pages/Blog.jsx` | User.me() call removed |
 | `src/pages/Post.jsx` | User.me(), admin edit/delete removed |
 | `src/pages/index.jsx` | Write/EditPost/Profile routes removed |
-| `package.json` | Remove `@base44/sdk`, add `react-markdown@^8`, rename to `ryankolean-site` |
+| `package.json` | Remove legacy SDK, add `react-markdown@^8`, rename to `ryankolean-site` |
 | `index.html` | Local favicon, title "Ryan Kolean" |
 | `README.md` | Replaced with site description |
 | `.gitignore` | Added — excludes node_modules/, dist/, .env |
